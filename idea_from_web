@@ -1,0 +1,105 @@
+//An example found online however could definitely neaten up with using header files etc
+// "dictionary_file" is just a name put in place for "guesses.txt" or whatever the file will be named
+
+
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <vector>
+#include <unordered_set>
+#include <unordered_map>
+
+using namespace std;
+
+class WordleHelper {
+private:
+    unordered_set<string> dictionary;
+
+public:
+    WordleHelper(const string& dictionary_file) {
+        loadDictionary(dictionary_file);
+    }
+
+    void loadDictionary(const string& file_path) {
+        ifstream file(file_path);
+        string word;
+        while (file >> word) {
+            dictionary.insert(word);
+        }
+        file.close();
+    }
+
+    void filterWords(const string& guess, int correct, int wrong_position, vector<string>& correct_position,
+        vector<string>& correct_letter, vector<string>& wrong_letters) {
+        for (const string& word : dictionary) {
+            if (word.size() != guess.size()) {
+                continue;
+            }
+
+            unordered_map<char, int> wordFreq, guessFreq;
+            int correctPositions = 0;
+
+            for (char c : word) wordFreq[c]++;
+            for (char c : guess) guessFreq[c]++;
+
+            for (int i = 0; i < guess.size(); ++i) {
+                if (guess[i] == word[i]) correctPositions++;
+            }
+
+            if (correctPositions == correct) {
+                correct_position.push_back(word);
+            }
+            else {
+                int commonLetters = 0;
+
+                for (char c = 'a'; c <= 'z'; ++c) {
+                    commonLetters += min(wordFreq[c], guessFreq[c]);
+                }
+
+                if (commonLetters == correct && correctPositions == wrong_position) {
+                    correct_letter.push_back(word);
+                }
+                else {
+                    wrong_letters.push_back(word);
+                }
+            }
+        }
+    }
+};
+
+int main() {
+    string dictionary_file = "dictionary.txt";
+    WordleHelper helper(dictionary_file);
+
+    string guess;
+    int correct, wrong_position;
+
+    cout << "Enter your guess: ";
+    cin >> guess;
+
+    cout << "Enter the number of correct letters: ";
+    cin >> correct;
+
+    cout << "Enter the number of letters in the wrong position: ";
+    cin >> wrong_position;
+
+    vector<string> correct_position, correct_letter, wrong_letters;
+    helper.filterWords(guess, correct, wrong_position, correct_position, correct_letter, wrong_letters);
+
+    cout << "Letters in the correct position:" << endl;
+    for (const string& word : correct_position) {
+        cout << word << endl;
+    }
+
+    cout << "Letters that are correct but in the wrong position:" << endl;
+    for (const string& word : correct_letter) {
+        cout << word << endl;
+    }
+
+    cout << "Letters that are wrong:" << endl;
+    for (const string& word : wrong_letters) {
+        cout << word << endl;
+    }
+
+    return 0;
+}
