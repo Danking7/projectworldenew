@@ -6,3 +6,20 @@
 //
 
 #include "implementation.hpp"
+
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <vector>
+#include <cstdlib>
+#include <ctime>
+
+using namespace std;
+
+string getRandomLine(const vector<string>& lines) {
+    if (lines.empty())
+        return "File is empty";
+    
+    int randomIndex = rand() % lines.size();
+    return lines[randomIndex];
+}

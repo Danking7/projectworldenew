@@ -1,13 +1,5 @@
-//
-//  implementation.hpp
-//  projectworldenew
-//
-//  Created by Dan King on 29/02/2024.
-//
+#pragma once
 
-#ifndef implementation_hpp
-#define implementation_hpp
+#include <string>
 
-#include <stdio.h>
-
-#endif /* implementation_hpp */
+std::string getRandomLine(const std::vector<std::string>& lines);
