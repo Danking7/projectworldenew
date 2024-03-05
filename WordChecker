@@ -1,0 +1,26 @@
+char processGuess(string theAnswer, string theGuess) {
+    int position = 0;
+    int guesses = 5;
+    int counter = 0;
+    string clue = "";
+
+    for (int i = 0; i < 5; i++) {
+        if (theAnswer[i] == theGuess[position]) {
+            clue += " G ";
+            position++;
+        }
+        else if ((theGuess[i] == theAnswer[0]) || (theGuess[i] == theAnswer[1]) || (theGuess[i] == theAnswer[2]) || (theGuess[i] == theAnswer[3]) || (theGuess[i] == theAnswer[4])
+        {
+            clue += " Y ";
+            position ++;
+        }
+        else {
+            clue += " _ ";
+            position ++;
+
+        }
+        counter++;
+    }
+    cout << clue << endl;
+    return clue == "G G G G G";
+}
